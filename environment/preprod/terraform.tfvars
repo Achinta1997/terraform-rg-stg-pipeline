@@ -26,7 +26,7 @@ RG = {
 
 STG = {
   stg1 = {
-    name                     = "preprodstarstorageacc001"
+    name                     = "preprodstarstorageaccraju001"
     location                 = "eastus"
     resource_group_name      = "preprod_myrg1"
     account_tier             = "Standard"
