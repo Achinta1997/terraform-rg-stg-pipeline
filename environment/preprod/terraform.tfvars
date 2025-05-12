@@ -2,12 +2,12 @@
 
 RG = {
   rg1 = {
-    name     = "preprod_myrg1"
+    name     = "preprod_myrg3"
     location = "East US"
   }
 
   rg2 = {
-    name     = "preprod_myrg2"
+    name     = "preprod_myrg4"
     location = "West US"
   }
 
@@ -26,9 +26,9 @@ RG = {
 
 STG = {
   stg1 = {
-    name                     = "preprodstorageraju001"
+    name                     = "preprodstorageraju003"
     location                 = "eastus"
-    resource_group_name      = "preprod_myrg1"
+    resource_group_name      = "preprod_myrg3"
     account_tier             = "Standard"
     account_replication_type = "GRS"
   }
