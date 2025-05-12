@@ -1,0 +1,136 @@
+trigger:
+- main
+
+pool:
+  vmImage: ubuntu-latest
+
+
+stages:
+  - stage: terraformInit
+    displayName: "Terraform init"
+    jobs:
+      - job: terraformInit
+        displayName: "Init Terraform"
+        steps:
+        - task: TerraformInstaller@1
+          displayName: "installing terraform"
+          inputs:
+            terraformVersion: 'latest'
+
+        - task: TerraformTask@5
+          displayName: "Init the terraform"
+          inputs:
+            provider: 'azurerm'
+            command: 'init'
+            workingDirectory: '$(System.DefaultWorkingDirectory)/environment/preprod'
+            backendServiceArm: 'myconnect'
+            backendAzureRmStorageAccountName: 'achintastorage001'
+            backendAzureRmContainerName: 'tf-container'
+            backendAzureRmKey: 'terraform.tfstate'
+
+
+  - stage: terraformValidate
+    displayName: "Terraform Validation check"
+    dependsOn: terraformInit
+    jobs:
+      - job: terraformValidate
+        steps:
+        - task: TerraformInstaller@1
+          displayName: "intsall terraform"
+          inputs:
+            terraformVersion: 'latest'
+
+        - task: TerraformTask@5
+          displayName: "Init the terraform"
+          inputs:
+            provider: 'azurerm'
+            command: 'init'
+            workingDirectory: '$(System.DefaultWorkingDirectory)/environment/preprod'
+            backendServiceArm: 'myconnect'
+            backendAzureRmStorageAccountName: 'achintastorage001'
+            backendAzureRmContainerName: 'tf-container'
+            backendAzureRmKey: 'terraform.tfstate'
+
+        - task: TerraformTask@5
+          displayName: "Validate terraform"
+          inputs:
+            provider: 'azurerm'
+            command: 'validate'
+            workingDirectory: '$(System.DefaultWorkingDirectory)/environment/preprod'
+          
+
+  - stage: terraformPlan
+    displayName: "Terraform Plan"
+    dependsOn: terraformValidate
+    jobs:
+      - job: terraformPlan
+        steps:
+        - task: TerraformInstaller@1
+          displayName: "Install Terraform"
+          inputs:
+            terraformVersion: 'latest'
+          
+        - task: TerraformTask@5
+          displayName: "Init the terraform"
+          inputs:
+            provider: 'azurerm'
+            command: 'init'
+            workingDirectory: '$(System.DefaultWorkingDirectory)/environment/preprod'
+            backendServiceArm: 'myconnect'
+            backendAzureRmStorageAccountName: 'achintastorage001'
+            backendAzureRmContainerName: 'tf-container'
+            backendAzureRmKey: 'terraform.tfstate'
+
+        - task: TerraformTask@5
+          displayName: "Terraform Plan"
+          inputs:
+            provider: 'azurerm'
+            command: 'plan'
+            workingDirectory: '$(System.DefaultWorkingDirectory)/environment/preprod'
+            environmentServiceNameAzureRM: 'myconnect'
+            
+      
+  - stage: manualValidation
+    displayName: "Waiting for approval"
+    dependsOn: terraformPlan
+    jobs:
+      - job: manualValidation
+        pool: server
+        steps:
+        - task: ManualValidation@1
+          displayName: "Manual validation"
+          inputs:
+            notifyUsers: 'achinta.dutta04@gmail.com'
+            approvers: 'achinta.dutta04@gmail.com'
+          
+  
+  - stage: terraformApply
+    dependsOn: manualValidation
+    jobs:
+      - job: terraformApply
+        steps:
+        - task: TerraformInstaller@1
+          displayName: "Install Terraform"
+          inputs:
+            terraformVersion: 'latest'
+
+        - task: TerraformTask@5
+          displayName: "Init the terraform"
+          inputs:
+            provider: 'azurerm'
+            command: 'init'
+            workingDirectory: '$(System.DefaultWorkingDirectory)/environment/preprod'
+            backendServiceArm: 'myconnect'
+            backendAzureRmStorageAccountName: 'achintastorage001'
+            backendAzureRmContainerName: 'tf-container'
+            backendAzureRmKey: 'terraform.tfstate'
+            
+        - task: TerraformTask@5
+          displayName: "Apply terraform"
+          inputs:
+            provider: 'azurerm'
+            command: 'apply'
+            workingDirectory: '$(System.DefaultWorkingDirectory)/environment/preprod'
+            environmentServiceNameAzureRM: 'myconnect'
+
+        
