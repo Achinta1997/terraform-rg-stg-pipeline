@@ -10,5 +10,5 @@ terraform {
 
 provider "azurerm" {
   features {}
-  subscription_id = "aee94afd-b039-4282-88ac-51ce582077df"
+  subscription_id = "aexxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxdf"
 }
