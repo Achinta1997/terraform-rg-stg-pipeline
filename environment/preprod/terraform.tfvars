@@ -32,13 +32,13 @@ STG = {
     account_tier             = "Standard"
     account_replication_type = "GRS"
   }
-#   stg2 = {
-#     name                     = "starstorageacc002"
-#     location                 = "westus"
-#     resource_group_name      = "myrg2"
-#     account_tier             = "Standard"
-#     account_replication_type = "LRS"
-#   }
+  #   stg2 = {
+  #     name                     = "starstorageacc002"
+  #     location                 = "westus"
+  #     resource_group_name      = "myrg2"
+  #     account_tier             = "Standard"
+  #     account_replication_type = "LRS"
+  #   }
 }
 
 # #Storage Account Container values
