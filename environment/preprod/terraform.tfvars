@@ -8,7 +8,7 @@ RG = {
 
   rg2 = {
     name     = "preprod_myrg4"
-    location = "West US"
+    location = "West UK"
   }
 
 
